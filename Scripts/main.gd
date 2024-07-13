@@ -24,7 +24,7 @@ func _spawn_stars():
 		for index in range(10):
 			#create new star instance
 			var new_star = star_scene.instantiate()
-			print(stars[index])
+			#print(stars[index])
 			new_star.initialize(stars[index])
 			$"Bounding Box/Stars".add_child(new_star)
 	

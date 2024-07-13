@@ -17,6 +17,3 @@ script = ExtResource("1_ywweq")
 [node name="StarMesh" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_4lakm")
 mesh = SubResource("SphereMesh_imbtx")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-light_energy = 500.0

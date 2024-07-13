@@ -1,13 +1,17 @@
 extends Node3D
 
 var starData:Array
-var temp2rgb = {}
+var temp2rgb:Dictionary
 var calculated_position:Vector3
+var starMaterial = StandardMaterial3D.new()
+var starLight = OmniLight3D.new()
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	temp2rgb = _init_temp_dict()
-	pass # Replace with function body.
+	$StarMesh.set_material_override(starMaterial)
+	pass
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -15,23 +19,27 @@ func _process(delta):
 	pass
 
 func initialize(starArray:Array):
+	#assign the star's data array to an in-object variable so that it may be referenced after initialization
 	starData.assign(starArray)
-	
+
 	#[  0   ,       1     ,      2       ,    3    ,   4   ,   5   ,   6    ,    7   ,    8   ,      9      ]
 	#["Name", Distance(ly), Color Temp(K), RA Hours, RA min, RA sec, Dec Deg, Dec min, Dec sec, Solar Masses]
 	_set_name(starArray[0])
-	#_set_color(starArray[2])
+	
+	#create temp 2 rbg dictionary and set star color
+	_init_temp_dict()
+	_set_color(starArray[2])
+	
+	#calculate star position from equitorial to cartesisan, then place in world
 	calculated_position = _calculate_position(starArray[1], Vector3(starArray[3],starArray[4], starArray[5]), Vector3(starArray[6],starArray[7], starArray[8]))
 	_set_star_position(calculated_position)
-	
-	pass
 
 func _set_name(name:String):
 	pass
 	
 func _set_star_position(Position:Vector3):
 	set_position(Position)
-	print("Position Set to: ", Position)
+	#print("Position Set to: ", Position)
 	
 	
 func _calculate_position(Distance:float,RightAscension:Vector3, Declination:Vector3) -> Vector3:
@@ -59,20 +67,30 @@ func _calculate_position(Distance:float,RightAscension:Vector3, Declination:Vect
 
 
 func _set_color(colorTemp:String):
-	print(colorTemp)
-	$StarMesh.material_override.albedo_color(Color(_temp_to_rgb(colorTemp).x,_temp_to_rgb(colorTemp).y,_temp_to_rgb(colorTemp).z))
-	
-	
+	#check for a null library
+	if temp2rgb.get(colorTemp) != null:
+		#print(colorTemp)
 		
-func _temp_to_rgb(colorTemp:String) -> Vector3:
-	return temp2rgb[colorTemp]
+		var star_rgb:Vector3 = Vector3(temp2rgb.get(colorTemp))
+		var star_color:Color = Color(star_rgb.x, star_rgb.y, star_rgb.z, 1.0)
+		starMaterial.set_albedo(star_color)
+		starMaterial.emission_enabled = true
+		starMaterial.set_emission(star_color)
+		starMaterial.set_emission_intensity(20.0)
+		$".".add_child(starLight)
+		starLight.set_color(star_color) 
+		starLight.light_energy = 20.0
+		print('Color has been set to: ', star_color)
+	else:
+		print("NULL TEMPERATURE DICTIONARY")
+
 	
 func _update_position():
 	#Check to see if the current position is where the star is supposed to be
 	pass
 	
-func _init_temp_dict() -> Dictionary:
-	var temp_dict = {
+func _init_temp_dict():
+	temp2rgb = {
 	"1000 K" : Vector3(255,  51,   0),
 	"1050 K" : Vector3(255,  56,   0),
 	"1100 K" : Vector3(255,  69,   0),
@@ -856,4 +874,7 @@ func _init_temp_dict() -> Dictionary:
 	"40000 K" : Vector3(161, 183, 255),
 	"40050 K" : Vector3(155, 188, 255)
 	}
-	return temp_dict
+	if temp2rgb != null:
+		print("DUPLICATION SUCCESFUL")
+	else:
+		print("DUPLICATION FAILED")
