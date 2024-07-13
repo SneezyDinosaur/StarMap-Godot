@@ -1,6 +1,8 @@
 extends Node3D
 
+var starData:Array
 var temp2rgb = {}
+var calculated_position:Vector3
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -13,23 +15,60 @@ func _process(delta):
 	pass
 
 func initialize(starArray:Array):
+	starData.assign(starArray)
+	
+	#[  0   ,       1     ,      2       ,    3    ,   4   ,   5   ,   6    ,    7   ,    8   ,      9      ]
 	#["Name", Distance(ly), Color Temp(K), RA Hours, RA min, RA sec, Dec Deg, Dec min, Dec sec, Solar Masses]
-	_set_name(starArray[1])
-	_set_position(starArray[2], Vector3(starArray[2],starArray[2], starArray[2]), Vector3(starArray[2],starArray[2], starArray[2])) #Index Locations need fixing
+	_set_name(starArray[0])
+	#_set_color(starArray[2])
+	calculated_position = _calculate_position(starArray[1], Vector3(starArray[3],starArray[4], starArray[5]), Vector3(starArray[6],starArray[7], starArray[8]))
+	_set_star_position(calculated_position)
 	
 	pass
 
 func _set_name(name:String):
 	pass
 	
-func _set_position(Distance:float,RightAscension:Vector3, Declination:Vector3):
-	pass
+func _set_star_position(Position:Vector3):
+	set_position(Position)
+	print("Position Set to: ", Position)
+	
+	
+func _calculate_position(Distance:float,RightAscension:Vector3, Declination:Vector3) -> Vector3:
+	
+	#Decimal Degrees = deg + (min/60) + (sec/3600)
+	#new_pos_polar converts the HMS format of astro coordinates to standard polar, Theta.x/Theta.y
+	var new_pos_polar = Vector2( 
+		RightAscension.x + (RightAscension.y / 60.0) + (RightAscension.z / 3600.0),
+		Declination.x + (Declination.y / 60.0) + (Declination.z / 3600.0)
+	)
+	
+	
+	#x = d * cos(Theta.x)
+	#y = d * sin(Theta.x)
+	#z = d * cos(Theta.y)
+	#new_pos_cartesian converts polar to cartesian XYZ.
+	var new_pos_cartesian = Vector3(
+		Distance * cos(new_pos_polar.x),
+		Distance * sin(new_pos_polar.x),
+		Distance * cos(new_pos_polar.y)
+	)
+	
+	
+	return new_pos_cartesian
+
 
 func _set_color(colorTemp:String):
-	pass
+	$StarMesh.material_override.albedo_color(Color(_temp_to_rgb(colorTemp).x,_temp_to_rgb(colorTemp).y,_temp_to_rgb(colorTemp).z))
+	
+	
 		
-func _temp_to_rgb(temp) -> Vector3:
-	return Vector3.ZERO
+func _temp_to_rgb(colorTemp:String) -> Vector3:
+	return temp2rgb[colorTemp]
+	
+func _update_position():
+	#Check to see if the current position is where the star is supposed to be
+	pass
 	
 func _init_temp_dict() -> Dictionary:
 	var temp_dict = {
