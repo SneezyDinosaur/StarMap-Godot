@@ -22,13 +22,13 @@ func initialize(starArray:Array):
 	#assign the star's data array to an in-object variable so that it may be referenced after initialization
 	starData.assign(starArray)
 
-	#[  0   ,       1     ,      2       ,    3    ,   4   ,   5   ,   6    ,    7   ,    8   ,      9      ]
-	#["Name", Distance(ly), Color Temp(K), RA Hours, RA min, RA sec, Dec Deg, Dec min, Dec sec, Solar Masses]
+	#[  0   ,       1     ,      2       ,    3    ,   4   ,   5   ,   6    ,    7   ,    8   ,      9      ,         10        ]
+	#["Name", Distance(ly), Color Temp(K), RA Hours, RA min, RA sec, Dec Deg, Dec min, Dec sec, Solar Masses, ABsolute Magnitude]
 	_set_name(starArray[0])
 	
 	#create temp 2 rbg dictionary and set star color
 	_init_temp_dict()
-	_set_color(starArray[2])
+	_set_color(starArray[2], starArray[10])
 	
 	#calculate star position from equitorial to cartesisan, then place in world
 	calculated_position = _calculate_position(starArray[1], Vector3(starArray[3],starArray[4], starArray[5]), Vector3(starArray[6],starArray[7], starArray[8]))
@@ -66,7 +66,7 @@ func _calculate_position(Distance:float,RightAscension:Vector3, Declination:Vect
 	return new_pos_cartesian
 
 
-func _set_color(colorTemp:String):
+func _set_color(colorTemp:String, absMagnitude:float):
 	#check for a null library
 	if temp2rgb.get(colorTemp) != null:
 		#print(colorTemp)
@@ -86,8 +86,8 @@ func _set_color(colorTemp:String):
 		var intensity_mod = 20.0 * star_rgb.z
 		if intensity_mod <= 0.1: # Brightness floor should be above 0
 			intensity_mod = 0.1
-		starMaterial.set_emission_energy_multiplier(intensity_mod) # At some point this needs to use Absolute Magnitude https://en.wikipedia.org/wiki/Absolute_magnitude
-		
+		starMaterial.set_emission_energy_multiplier(absMagnitude * 0.75) # At some point this needs to use Absolute Magnitude https://en.wikipedia.org/wiki/Absolute_magnitude
+
 		
 		
 			
