@@ -1,4 +1,5 @@
 extends Node
+
 var tmp0 = []
 @export var stars: Array
 @export var star_scene: PackedScene
@@ -15,15 +16,17 @@ func _ready():
 func _process(delta):
 	pass
 
+
+	
 func _spawn_stars():
 	
-
-	for index in range(10):
-		#create new star instance
-		var new_star = star_scene.instantiate()
-		print(stars[index])
-		new_star.initialize(stars[index])
-		$"Bounding Box/Stars".add_child(new_star)
+	if star_scene != null:
+		for index in range(10):
+			#create new star instance
+			var new_star = star_scene.instantiate()
+			print(stars[index])
+			new_star.initialize(stars[index])
+			$"Bounding Box/Stars".add_child(new_star)
 	
 
 func _initialize_star_data():

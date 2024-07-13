@@ -59,6 +59,7 @@ func _calculate_position(Distance:float,RightAscension:Vector3, Declination:Vect
 
 
 func _set_color(colorTemp:String):
+	print(colorTemp)
 	$StarMesh.material_override.albedo_color(Color(_temp_to_rgb(colorTemp).x,_temp_to_rgb(colorTemp).y,_temp_to_rgb(colorTemp).z))
 	
 	

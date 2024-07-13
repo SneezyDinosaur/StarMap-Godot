@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://dc1xqtc4u4r47"]
+[gd_scene load_steps=9 format=3 uid="uid://dc1xqtc4u4r47"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_l2lsk"]
-[ext_resource type="PackedScene" uid="uid://bktd3qy4nytwa" path="res://Scenes/star.tscn" id="2_6xgbo"]
+[ext_resource type="Script" path="res://Scenes/CameraPivot.gd" id="2_njmbo"]
+[ext_resource type="PackedScene" uid="uid://bmse38qp0acm8" path="res://star.tscn" id="3_gchyy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dutqx"]
 sky_top_color = Color(0, 0, 0, 1)
@@ -13,8 +14,10 @@ ground_horizon_color = Color(0.5, 0.5, 0.5, 1)
 sky_material = SubResource("ProceduralSkyMaterial_dutqx")
 
 [sub_resource type="Environment" id="Environment_1ypbv"]
-background_mode = 2
+background_mode = 1
 sky = SubResource("Sky_ojpo0")
+ambient_light_source = 1
+reflected_light_source = 1
 tonemap_mode = 2
 glow_enabled = true
 
@@ -26,74 +29,71 @@ emission_energy_multiplier = 16.3
 
 [sub_resource type="SphereMesh" id="SphereMesh_4dmea"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node3D"]
 script = ExtResource("1_l2lsk")
-star_scene = ExtResource("2_6xgbo")
+star_scene = ExtResource("3_gchyy")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1ypbv")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
-shadow_enabled = true
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.872786, 0.488103, 0, -0.488103, 0.872786, 1.90735e-06, 2.96023, 5.03859)
-fov = 90.0
 
 [node name="Bounding Box" type="Node3D" parent="."]
 
 [node name="Outline" type="Node3D" parent="Bounding Box"]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+visible = false
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Bounding Box/Outline"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.99992, -4.99986, -10.0004)
 material_override = SubResource("StandardMaterial3D_xa3av")
 mesh = SubResource("SphereMesh_4dmea")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Bounding Box/Outline"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0001, -4.99986, 9.99961)
 material_override = SubResource("StandardMaterial3D_xa3av")
 mesh = SubResource("SphereMesh_4dmea")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="Bounding Box/Outline"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0001, -4.99986, -10.0004)
 material_override = SubResource("StandardMaterial3D_xa3av")
 mesh = SubResource("SphereMesh_4dmea")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="Bounding Box/Outline"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.99992, 5.00014, 9.99961)
 material_override = SubResource("StandardMaterial3D_xa3av")
 mesh = SubResource("SphereMesh_4dmea")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 
 [node name="MeshInstance3D6" type="MeshInstance3D" parent="Bounding Box/Outline"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.99992, 5.00014, -10.0004)
 material_override = SubResource("StandardMaterial3D_xa3av")
 mesh = SubResource("SphereMesh_4dmea")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 
 [node name="MeshInstance3D7" type="MeshInstance3D" parent="Bounding Box/Outline"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0001, 5.00014, 9.99961)
 material_override = SubResource("StandardMaterial3D_xa3av")
 mesh = SubResource("SphereMesh_4dmea")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 
 [node name="MeshInstance3D8" type="MeshInstance3D" parent="Bounding Box/Outline"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0001, 5.00014, -10.0004)
 material_override = SubResource("StandardMaterial3D_xa3av")
 mesh = SubResource("SphereMesh_4dmea")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Bounding Box/Outline"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.99992, -4.99986, 9.99961)
 material_override = SubResource("StandardMaterial3D_xa3av")
 mesh = SubResource("SphereMesh_4dmea")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 
 [node name="Stars" type="Node3D" parent="Bounding Box"]
 
 [node name="CameraPivot" type="Node3D" parent="."]
+script = ExtResource("2_njmbo")
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)

@@ -8,8 +8,8 @@ emission = Color(1, 1, 1, 1)
 emission_energy_multiplier = 20.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_imbtx"]
-radius = 2.0
-height = 4.0
+radius = 0.125
+height = 0.25
 
 [node name="Star" type="Node3D"]
 script = ExtResource("1_ywweq")
@@ -17,3 +17,6 @@ script = ExtResource("1_ywweq")
 [node name="StarMesh" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_4lakm")
 mesh = SubResource("SphereMesh_imbtx")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_energy = 500.0
