@@ -12,6 +12,22 @@ func _ready():
 func _process(delta):
 	pass
 
+func initialize(starArray:Array):
+	#["Name", Distance(ly), Color Temp(K), RA Hours, RA min, RA sec, Dec Deg, Dec min, Dec sec, Solar Masses]
+	_set_name(starArray[1])
+	_set_position(starArray[2], Vector3(starArray[2],starArray[2], starArray[2]), Vector3(starArray[2],starArray[2], starArray[2])) #Index Locations need fixing
+	
+	pass
+
+func _set_name(name:String):
+	pass
+	
+func _set_position(Distance:float,RightAscension:Vector3, Declination:Vector3):
+	pass
+
+func _set_color(colorTemp:String):
+	pass
+		
 func _temp_to_rgb(temp) -> Vector3:
 	return Vector3.ZERO
 	
