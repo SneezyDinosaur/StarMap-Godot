@@ -72,17 +72,26 @@ func _set_color(colorTemp:String):
 		#print(colorTemp)
 		
 		var star_rgb:Vector3 = Vector3(temp2rgb.get(colorTemp))
+		star_rgb = star_rgb.normalized()
 		var star_color:Color = Color(star_rgb.x, star_rgb.y, star_rgb.z, 1.0)
 		starMaterial.set_albedo(star_color)
 		starMaterial.emission_enabled = true
 		starMaterial.set_emission(star_color)
-		starMaterial.set_emission_intensity(20.0)
+		starMaterial.set_emission_energy_multiplier(2.0)
 		$".".add_child(starLight)
 		starLight.set_color(star_color) 
-		starLight.light_energy = 20.0
-		print('Color has been set to: ', star_color)
-	else:
-		print("NULL TEMPERATURE DICTIONARY")
+		starLight.omni_range = 100.0
+		
+		#
+		var intensity_mod = 20.0 * star_rgb.z
+		if intensity_mod <= 0.1: # Brightness floor should be above 0
+			intensity_mod = 0.1
+		starMaterial.set_emission_energy_multiplier(intensity_mod) # At some point this needs to use Absolute Magnitude https://en.wikipedia.org/wiki/Absolute_magnitude
+		
+		
+		
+			
+		print(star_rgb)
 
 	
 func _update_position():
